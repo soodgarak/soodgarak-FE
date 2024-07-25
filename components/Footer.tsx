@@ -15,12 +15,12 @@ const Footer = () => {
   return (
     <footer className='sticky bottom-0'>
       <nav>
-        <ul className='flex justify-center gap-[10.5rem] bg-white py-8'>
+        <ul className='flex justify-evenly rounded-t-lg bg-white py-20'>
           {NAV_ITEMS.map(({ title, link, Icon }) => (
             <li key={title}>
               <Link href={link} className='flex flex-col items-center'>
-                <Icon />
-                <p className='text-[1.2rem]'>{title}</p>
+                <Icon className='h-[5rem] w-[5rem]' />
+                <p className='text-14'>{title}</p>
               </Link>
             </li>
           ))}
