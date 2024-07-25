@@ -18,19 +18,19 @@ const Header = () => {
         <Image
           src='/images/soodgarak-logo.png'
           alt='soodgarak logo'
-          width={120}
-          height={48}
-          className='h-[4.8rem] w-[12rem]'
+          width={150}
+          height={60}
+          className='h-[6rem] w-[15rem]'
         />
       </Link>
       <div className='relative grow'>
         <input
-          className='text-16 rounded-12 h-[4.8rem] w-full bg-gray-sm pl-[4.8rem]'
+          className='text-20 rounded-12 h-[6rem] w-full bg-gray-sm pl-[5.6rem]'
           placeholder='요리 or 재료'
           ref={inputRef}
         />
         <SearchIcon
-          className='absolute left-[1.2rem] top-[1.2rem] h-[2.4rem] w-[2.4rem] cursor-pointer'
+          className='absolute left-[1.2rem] top-[1.4rem] h-[3.2rem] w-[3.2rem] cursor-pointer'
           onClick={inputFocusHandler}
         />
       </div>

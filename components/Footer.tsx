@@ -13,7 +13,7 @@ const NAV_ITEMS = [
 
 const Footer = () => {
   return (
-    <footer className='sticky bottom-0'>
+    <footer className='fixed bottom-0 w-full max-w-[640px]'>
       <nav>
         <ul className='flex justify-evenly rounded-t-lg bg-white py-20'>
           {NAV_ITEMS.map(({ title, link, Icon }) => (
