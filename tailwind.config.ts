@@ -87,7 +87,7 @@ const config: Config = {
         48: '4.8rem'
       },
       boxShadow: {
-        all: 'rgba(0, 0, 0, 0.24) 0px 3px 8px;'
+        all: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
       }
     }
   },
