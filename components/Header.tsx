@@ -5,10 +5,12 @@ import SearchIcon from '@/components/icon/SearchIcon';
 import { FormEvent, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useFoodListInfoStore } from '@/store/foodList';
 
 const Header = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const { setType, setKeyword } = useFoodListInfoStore();
 
   const inputFocusHandler = () => {
     inputRef.current?.focus();
@@ -16,7 +18,9 @@ const Header = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    router.push(`/foods?type=search&keyword=${inputRef.current?.value}`);
+    setType('search');
+    setKeyword(inputRef.current?.value || '');
+    router.push('/foods');
     if (inputRef.current) inputRef.current.value = '';
   };
 
@@ -37,6 +41,7 @@ const Header = () => {
           className='h-[6rem] w-full rounded-12 bg-gray-sm pl-[5.6rem] text-20'
           placeholder='요리 or 재료'
           ref={inputRef}
+          required
         />
         <SearchIcon
           className='absolute left-[1.2rem] top-[1.4rem] h-[3.2rem] w-[3.2rem] cursor-pointer'
