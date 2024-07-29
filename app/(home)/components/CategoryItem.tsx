@@ -12,14 +12,14 @@ const CategoryItem = ({ title, size, imgName, link }: CategoryItemProps) => {
   return (
     <Link
       href={link}
-      className={`relative overflow-hidden rounded-12 ${size === '2' ? 'col-span-2' : 'col-span-3'}`}
+      className={`group relative overflow-hidden rounded-12 ${size === '2' ? 'col-span-2' : 'col-span-3'}`}
     >
       <Image
         src={`/images/${imgName}.png`}
         alt={title}
         width={300}
         height={160}
-        className='h-[16rem] w-full'
+        className='h-[16rem] w-full transition group-hover:scale-110'
       />
       <div className='absolute top-0 flex h-full w-full items-center justify-center bg-black/50'>
         <p className='text-24 font-bold text-white'>{title}</p>
