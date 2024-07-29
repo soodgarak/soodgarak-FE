@@ -1,30 +1,42 @@
+'use client';
+
+import { useFoodListInfoStore } from '@/store/foodList';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type CategoryItemProps = {
   title: string;
+  enTitle: string;
   size: '2' | '3';
-  imgName: string;
-  link: string;
 };
 
-const CategoryItem = ({ title, size, imgName, link }: CategoryItemProps) => {
+const CategoryItem = ({ title, enTitle, size }: CategoryItemProps) => {
+  const router = useRouter();
+  const { setType, setKeyword } = useFoodListInfoStore();
+
+  const handleClick = () => {
+    setType('category');
+    setKeyword(title);
+    router.push('/foods');
+  };
+
   return (
-    <Link
-      href={link}
-      className={`group relative overflow-hidden rounded-12 ${size === '2' ? 'col-span-2' : 'col-span-3'}`}
+    <li
+      className={`group relative cursor-pointer overflow-hidden rounded-12 ${size === '2' ? 'col-span-2' : 'col-span-3'}`}
+      onClick={handleClick}
     >
       <Image
-        src={`/images/${imgName}.png`}
+        src={`/images/${enTitle}.png`}
         alt={title}
         width={300}
-        height={160}
-        className='h-[16rem] w-full transition group-hover:scale-110'
+        height={0}
+        className='h-auto w-full transition group-hover:scale-110'
+        priority
       />
       <div className='absolute top-0 flex h-full w-full items-center justify-center bg-black/50'>
         <p className='text-24 font-bold text-white'>{title}</p>
       </div>
-    </Link>
+    </li>
   );
 };
 
