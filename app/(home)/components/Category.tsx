@@ -8,31 +8,31 @@ const Category = () => {
       <div className='grid grid-cols-6 gap-12'>
         <CategoryItem
           title='자극적인 음식'
-          link='/foods?type=category&keyword=spicy'
+          link='/foods?type=category&keyword=자극적인 음식'
           imgName='spicy'
           size='3'
         />
         <CategoryItem
           title='담백한 음식'
-          link='/foods?type=category&keyword=mild'
+          link='/foods?type=category&keyword=담백한 음식'
           imgName='mild'
           size='3'
         />
         <CategoryItem
           title='육류'
-          link='/foods?type=category&keyword=meat'
+          link='/foods?type=category&keyword=육류'
           imgName='meat'
           size='2'
         />
         <CategoryItem
           title='해산물'
-          link='/foods?type=category&keyword=seafood'
+          link='/foods?type=category&keyword=해산물'
           imgName='seafood'
           size='2'
         />
         <CategoryItem
           title='야채 과일 기타'
-          link='/foods?type=category&keyword=vegetable'
+          link='/foods?type=category&keyword=야채 과일 기타'
           imgName='vegetable'
           size='2'
         />

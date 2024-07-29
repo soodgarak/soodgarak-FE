@@ -18,8 +18,9 @@ const CategoryItem = ({ title, size, imgName, link }: CategoryItemProps) => {
         src={`/images/${imgName}.png`}
         alt={title}
         width={300}
-        height={160}
-        className='h-[16rem] w-full transition group-hover:scale-110'
+        height={0}
+        className='h-auto w-full transition group-hover:scale-110'
+        priority
       />
       <div className='absolute top-0 flex h-full w-full items-center justify-center bg-black/50'>
         <p className='text-24 font-bold text-white'>{title}</p>

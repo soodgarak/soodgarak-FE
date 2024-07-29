@@ -1,3 +1,4 @@
+import FoodList from '@/components/FoodList';
 import { redirect } from 'next/navigation';
 
 type FoodPageProps = {
@@ -9,10 +10,15 @@ type FoodPageProps = {
 
 const FoodPage = ({ searchParams }: FoodPageProps) => {
   if (!searchParams.type || !searchParams.keyword) return redirect('/');
+  const { type, keyword } = searchParams;
+
   return (
-    <div>
-      타입: {searchParams.type}, 키워드: {searchParams.keyword}
-    </div>
+    <section>
+      <h1 className='mb-24 text-28 font-bold'>
+        {type === 'category' ? `${keyword}` : `"${keyword}"의 검색결과`}
+      </h1>
+      <FoodList />
+    </section>
   );
 };
 
