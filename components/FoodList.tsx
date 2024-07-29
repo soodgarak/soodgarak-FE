@@ -1,10 +1,15 @@
 import FoodListItem from '@/app/(home)/components/FoodListItem';
 import { DUMMY_FOODS } from '@/mock/data';
+import { Food } from '@/types/food';
 
-const FoodList = () => {
+type FoodListProps = {
+  foods: Food[];
+};
+
+const FoodList = ({ foods }: FoodListProps) => {
   return (
     <ul className='grid grid-cols-2 gap-20'>
-      {DUMMY_FOODS.map((food) => (
+      {foods.map((food) => (
         <li key={food.name}>
           <FoodListItem food={food} />
         </li>

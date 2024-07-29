@@ -2,15 +2,13 @@
 
 import Image from 'next/image';
 import SearchIcon from '@/components/icon/SearchIcon';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useFoodListInfoStore } from '@/store/foodList';
 
 const Header = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const { setType, setKeyword } = useFoodListInfoStore();
 
   const inputFocusHandler = () => {
     inputRef.current?.focus();
@@ -18,9 +16,7 @@ const Header = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setType('search');
-    setKeyword(inputRef.current?.value || '');
-    router.push('/foods');
+    router.push(`/foods?type=search&keyword=${inputRef.current?.value}`);
     if (inputRef.current) inputRef.current.value = '';
   };
 
