@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import BottomNavBar from '@/components/BottomNavBar';
 import './globals.css';
 
 export const viewport: Viewport = {
@@ -24,10 +24,10 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body className='bg-neutral-100'>
-        <div className='mx-auto flex min-h-screen max-w-[640px] flex-col bg-white'>
+        <div className='mx-auto flex min-h-dvh max-w-[640px] flex-col bg-white'>
           <Header />
-          <main className='grow px-20 pb-[10rem] pt-20'>{children}</main>
-          <Footer />
+          <main className='grow px-20 pb-[12rem] pt-20'>{children}</main>
+          <BottomNavBar />
         </div>
       </body>
     </html>

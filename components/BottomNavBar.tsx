@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { title: 'MY', link: '/my', Icon: UserIcon }
 ];
 
-const Footer = () => {
+const BottomNavBar = () => {
   return (
     <footer className='fixed bottom-0 w-full max-w-[640px]'>
       <nav>
@@ -30,4 +30,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default BottomNavBar;

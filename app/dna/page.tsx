@@ -1,7 +1,8 @@
 import CardSwiper from './components/CardSwiper';
+import TestSwiper from './components/TestSwiper';
 
 const DNAPage = () => {
-  return <CardSwiper />;
+  return <TestSwiper />;
 };
 
 export default DNAPage;
