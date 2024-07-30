@@ -1,3 +1,6 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import HomeIcon from '@/components/icon/HomeIcon';
 import DNAIcon from '@/components/icon/DNAIcon';
 import PinIcon from '@/components/icon/PinIcon';
@@ -12,18 +15,23 @@ const NAV_ITEMS = [
 ];
 
 const BottomNavBar = () => {
+  const pathname = usePathname();
   return (
     <footer className='fixed bottom-0 w-full max-w-[640px]'>
       <nav>
         <ul className='flex justify-evenly rounded-t-lg bg-white py-[1.5rem]'>
-          {NAV_ITEMS.map(({ title, link, Icon }) => (
-            <li key={title}>
-              <Link href={link} className='flex flex-col items-center'>
-                <Icon className='h-[4.9rem] w-[4.9rem]' />
-                <p className='text-14'>{title}</p>
-              </Link>
-            </li>
-          ))}
+          {NAV_ITEMS.map(({ title, link, Icon }) => {
+            const isActive = link === '/' ? pathname === link : pathname.startsWith(link);
+
+            return (
+              <li key={title}>
+                <Link href={link} className='flex flex-col items-center'>
+                  <Icon isActive={isActive} className='h-[4.9rem] w-[4.9rem]' />
+                  <p className={`text-14 ${isActive && 'text-primary'}`}>{title}</p>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </footer>
