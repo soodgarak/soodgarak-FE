@@ -2,14 +2,16 @@
 
 import { DUMMY_FOODS } from '@/mock/data';
 import Image from 'next/image';
+import HateButton from './HateButton';
+import LikeButton from './LikeButton';
 
 const TestSwiper = () => {
   return (
-    <div className='relative'>
+    <section className='relative flex grow flex-col items-center'>
       {DUMMY_FOODS.map((food) => (
         <div
           key={food.name}
-          className='absolute h-[64vh] w-[50rem] cursor-grab touch-none overflow-hidden rounded-16 bg-white'
+          className='absolute h-5/6 w-[50rem] cursor-grab touch-none overflow-hidden rounded-16 bg-white'
         >
           <Image
             src={food.mainImg}
@@ -20,17 +22,17 @@ const TestSwiper = () => {
             priority
           />
           <div className='absolute left-0 top-0 h-full w-full bg-gradient-to-b from-white/10 to-black/40' />
-          <p className='absolute bottom-4 left-1/2 w-full -translate-x-1/2 text-center text-24 text-white'>
+          <p className='absolute bottom-8 left-1/2 w-full -translate-x-1/2 text-center text-40 text-white'>
             {food.name}
           </p>
         </div>
       ))}
-    </div>
+      <div className='absolute bottom-0 flex justify-center gap-36'>
+        <HateButton onClick={() => {}} />
+        <LikeButton onClick={() => {}} />
+      </div>
+    </section>
   );
 };
 
 export default TestSwiper;
-
-<main className='grow px-20 pb-[12rem] pt-20'>
-  <div></div>
-</main>;
