@@ -15,11 +15,11 @@ const Footer = () => {
   return (
     <footer className='fixed bottom-0 w-full max-w-[640px]'>
       <nav>
-        <ul className='flex justify-evenly rounded-t-lg bg-white py-20'>
+        <ul className='flex justify-evenly rounded-t-lg bg-white py-[1.5rem]'>
           {NAV_ITEMS.map(({ title, link, Icon }) => (
             <li key={title}>
               <Link href={link} className='flex flex-col items-center'>
-                <Icon className='h-[5rem] w-[5rem]' />
+                <Icon className='h-[4.9rem] w-[4.9rem]' />
                 <p className='text-14'>{title}</p>
               </Link>
             </li>
