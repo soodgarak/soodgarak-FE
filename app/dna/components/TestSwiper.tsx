@@ -4,7 +4,7 @@ import { DUMMY_FOODS } from '@/mock/data';
 import Image from 'next/image';
 import HateButton from './HateButton';
 import LikeButton from './LikeButton';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 const TestSwiper = () => {
   const [startX, setStartX] = useState(0);
@@ -42,11 +42,8 @@ const TestSwiper = () => {
 
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!frame.current || !currentCard.current) return;
-    currentCard.current.removeEventListener('pointermove', onPointerMove as any);
-    currentCard.current.removeEventListener('pointerup', onPointerUp as any);
-    currentCard.current.removeEventListener('pointerleave', onPointerUp as any);
+
     if (Math.abs(moveX) > frame.current.clientWidth / 2) {
-      currentCard.current.removeEventListener('pointerdown', onPointerDown as any);
       complete();
     } else {
       cancel();
@@ -56,12 +53,6 @@ const TestSwiper = () => {
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     setStartX(e.clientX);
     setStartY(e.clientY);
-
-    if (currentCard.current) {
-      currentCard.current.addEventListener('pointermove', onPointerMove as any);
-      currentCard.current.addEventListener('pointerup', onPointerUp as any);
-      currentCard.current.addEventListener('pointerleave', onPointerUp as any);
-    }
   };
 
   return (
@@ -71,6 +62,9 @@ const TestSwiper = () => {
           key={food.name}
           className='absolute h-5/6 w-[50rem] cursor-grab touch-none overflow-hidden rounded-16 bg-white'
           onPointerDown={onPointerDown}
+          // onPointerMove={onPointerMove}
+          // onPointerUp={onPointerUp}
+          // onPointerLeave={onPointerUp}
           ref={index === DUMMY_FOODS.length - 1 ? currentCard : null}
         >
           <Image
