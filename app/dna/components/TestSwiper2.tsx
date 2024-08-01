@@ -15,23 +15,25 @@ const TestSwiper2 = () => {
     x: 0,
     y: 0,
     rotate: 0,
+    scale: 1,
     config: { duration: window.innerWidth * 0.7 }
   }));
   const frame = useRef<HTMLDivElement>(null);
+  const gone = new Set<number>(); // Set to track cards that are gone
 
-  const complete = (mx: number, my: number) => {
+  const complete = (mx: number, my: number, index: number) => {
     const flyX = (Math.abs(mx) / mx) * window.innerWidth * 1.3;
     const flyY = (my / mx) * flyX;
 
-    api.start((index) => {
-      if (index === cards.length - 1) {
+    api.start((i) => {
+      if (i === index) {
         return {
           x: flyX,
           y: flyY,
           rotate: (flyX / window.innerWidth) * 50,
           onRest: () => {
             setCards((prev) => [prev[prev.length - 1], ...prev.slice(0, prev.length - 1)]);
-            api.set((index) => (index === cards.length - 1 ? { x: 0, y: 0, rotate: 0 } : {}));
+            api.set((i) => (i === index ? { x: 0, y: 0, rotate: 0 } : {}));
           }
         };
       }
@@ -39,37 +41,41 @@ const TestSwiper2 = () => {
     });
   };
 
-  const cancel = () => {
-    api.start({
-      x: 0,
-      y: 0,
-      rotate: 0,
-      immediate: true
-    });
-  };
+  const bind = useDrag(
+    ({ active, movement: [mx, my], direction: [xDir], velocity: [vx], args: [index] }) => {
+      const trigger = vx > 0.2;
+      if (!active && trigger) gone.add(index);
 
-  const bind = useDrag(({ down, movement: [mx, my] }) => {
-    if (!frame.current) return;
-    if (Math.abs(mx) > frame.current.clientWidth / 2 && !down) {
-      complete(mx, my);
-    } else {
-      cancel();
+      api.start((i) => {
+        if (index !== i) return;
+
+        const isGone = gone.has(index);
+        const x = isGone ? (200 + window.innerWidth) * xDir : active ? mx : 0;
+        const rotate = active
+          ? (mx / window.innerWidth) * 20
+          : isGone
+            ? mx / 100 + xDir * 10 * vx
+            : 0;
+
+        const scale = active ? 1.1 : 1;
+
+        return {
+          x,
+          y: 0,
+          rotate,
+          scale,
+          config: { friction: 50, tension: active ? 800 : isGone ? 200 : 500 }
+        };
+      });
     }
-    down &&
-      api.start((index) => ({
-        x: index === cards.length - 1 ? mx : 0,
-        y: index === cards.length - 1 ? my : 0,
-        rotate: index === cards.length - 1 ? (mx / window.innerWidth) * 20 : 0,
-        immediate: true
-      }));
-  });
+  );
 
   const like = () => {
-    complete(1, 0);
+    complete(1, 0, cards.length - 1);
   };
 
   const hate = () => {
-    complete(-1, 0);
+    complete(-1, 0, cards.length - 1);
   };
 
   return (
@@ -78,7 +84,7 @@ const TestSwiper2 = () => {
         <animated.div
           key={food.name}
           style={springs[index]}
-          {...bind()}
+          {...bind(index)} // Pass index as args here
           className='absolute z-20 h-5/6 w-[50rem] cursor-grab touch-none overflow-hidden rounded-16 bg-white'
         >
           <Image
