@@ -11,26 +11,62 @@ import { Food } from '@/types/food';
 
 const TestSwiper2 = () => {
   const [cards, setCards] = useState<Food[]>(DUMMY_FOODS);
-  const [{ x, y, rotate }, api] = useSpring(() => ({ x: 0, y: 0, rotate: 0 }));
+  const [{ x, y, rotate }, api] = useSpring(() => ({
+    x: 0,
+    y: 0,
+    rotate: 0
+  }));
   const frame = useRef<HTMLDivElement>(null);
 
-  const complete = () => {
-    api.start({ x: 0, y: 0, rotate: 0, immediate: true });
-    setCards((prev) => prev.slice(0, prev.length - 1));
+  const complete = (mx: number, my: number) => {
+    const flyX = (Math.abs(mx) / mx) * window.innerWidth * 1.3;
+    const flyY = (my / mx) * flyX;
+
+    api.start({
+      x: flyX,
+      y: flyY,
+      rotate: (flyX / window.innerWidth) * 50,
+      immediate: false,
+      config: { duration: window.innerWidth * 0.7 },
+      onRest: () => {
+        setCards((prev) => [prev[prev.length - 1], ...prev.slice(0, prev.length - 1)]);
+        api.set({ x: 0, y: 0, rotate: 0 });
+      }
+    });
+  };
+
+  const cancel = () => {
+    api.start({
+      x: 0,
+      y: 0,
+      rotate: 0,
+      immediate: false
+    });
   };
 
   const bind = useDrag(({ down, movement: [mx, my] }) => {
     if (!frame.current) return;
-    if (Math.abs(mx) > frame.current.clientWidth / 3) {
-      !down && complete();
+    if (Math.abs(mx) > frame.current.clientWidth / 2 && !down) {
+      complete(mx, my);
+    } else {
+      cancel();
     }
-    api.start({
-      x: down ? mx : 0,
-      y: down ? my : 0,
-      rotate: down ? (mx / window.innerWidth) * 20 : 0,
-      immediate: down
-    });
+    down &&
+      api.start({
+        x: mx,
+        y: my,
+        rotate: (mx / window.innerWidth) * 20,
+        immediate: down
+      });
   });
+
+  const like = () => {
+    complete(1, 0);
+  };
+
+  const hate = () => {
+    complete(-1, 0);
+  };
 
   return (
     <section className='relative mx-auto flex w-[50rem] grow flex-col items-center' ref={frame}>
@@ -56,8 +92,8 @@ const TestSwiper2 = () => {
         </animated.div>
       ))}
       <div className='absolute bottom-0 flex justify-center gap-36'>
-        <HateButton onClick={() => {}} />
-        <LikeButton onClick={() => {}} />
+        <HateButton onClick={hate} />
+        <LikeButton onClick={like} />
       </div>
     </section>
   );
