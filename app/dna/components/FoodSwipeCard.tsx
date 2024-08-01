@@ -2,12 +2,20 @@
 
 import { Food } from '@/types/food';
 import Image from 'next/image';
-import { SpringValues, animated } from '@react-spring/web';
+import { SpringValue, animated } from '@react-spring/web';
+import { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types';
+
+type Spring = {
+  x: SpringValue<number>;
+  y: SpringValue<number>;
+  rotate: SpringValue<number>;
+  scale: SpringValue<number>;
+};
 
 type FoodCardProps = {
   food: Food;
-  style: any;
-  bind: any;
+  style: Spring;
+  bind: ReactDOMAttributes;
 };
 
 const FoodSwipeCard = ({ food, style, bind }: FoodCardProps) => {
