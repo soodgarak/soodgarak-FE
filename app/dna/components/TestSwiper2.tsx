@@ -11,6 +11,7 @@ import { Food } from '@/types/food';
 
 const TestSwiper2 = () => {
   const [cards, setCards] = useState<Food[]>(DUMMY_FOODS);
+  const [currentIndex, setCurrentIndex] = useState(cards.length - 1);
   const [springs, api] = useSprings(cards.length, (index) => ({
     x: 0,
     y: 0,
@@ -19,63 +20,57 @@ const TestSwiper2 = () => {
     config: { duration: window.innerWidth * 0.7 }
   }));
   const frame = useRef<HTMLDivElement>(null);
-  const gone = new Set<number>(); // Set to track cards that are gone
+  const gone = new Set<number>();
 
-  const complete = (mx: number, my: number, index: number) => {
-    const flyX = (Math.abs(mx) / mx) * window.innerWidth * 1.3;
-    const flyY = (my / mx) * flyX;
+  const complete = (
+    isTrigger: boolean,
+    index: number,
+    xDir: number,
+    active = false,
+    mx = 0,
+    vx = 1
+  ) => {
+    if (isTrigger) gone.add(index);
 
     api.start((i) => {
-      if (i === index) {
-        return {
-          x: flyX,
-          y: flyY,
-          rotate: (flyX / window.innerWidth) * 50,
-          onRest: () => {
-            setCards((prev) => [prev[prev.length - 1], ...prev.slice(0, prev.length - 1)]);
-            api.set((i) => (i === index ? { x: 0, y: 0, rotate: 0 } : {}));
-          }
-        };
-      }
-      return {};
+      if (index !== i) return;
+      setCurrentIndex(index - 1);
+
+      const isGone = gone.has(index);
+      const x = isGone ? (200 + window.innerWidth) * xDir : active ? mx : 0;
+      const rotate = active
+        ? (mx / window.innerWidth) * 20
+        : isGone
+          ? mx / 100 + xDir * 10 * vx
+          : 0;
+
+      const scale = active ? 1.1 : 1;
+
+      return {
+        x,
+        y: 0,
+        rotate,
+        scale,
+        config: { friction: 50, tension: active ? 800 : isGone ? 200 : 500 }
+      };
     });
   };
 
   const bind = useDrag(
-    ({ active, movement: [mx, my], direction: [xDir], velocity: [vx], args: [index] }) => {
+    ({ active, movement: [mx], direction: [xDir], velocity: [vx], args: [index] }) => {
       const trigger = vx > 0.2;
       if (!active && trigger) gone.add(index);
 
-      api.start((i) => {
-        if (index !== i) return;
-
-        const isGone = gone.has(index);
-        const x = isGone ? (200 + window.innerWidth) * xDir : active ? mx : 0;
-        const rotate = active
-          ? (mx / window.innerWidth) * 20
-          : isGone
-            ? mx / 100 + xDir * 10 * vx
-            : 0;
-
-        const scale = active ? 1.1 : 1;
-
-        return {
-          x,
-          y: 0,
-          rotate,
-          scale,
-          config: { friction: 50, tension: active ? 800 : isGone ? 200 : 500 }
-        };
-      });
+      complete(!active && trigger, index, xDir, active, mx, vx);
     }
   );
 
   const like = () => {
-    complete(1, 0, cards.length - 1);
+    complete(true, currentIndex, 1);
   };
 
   const hate = () => {
-    complete(-1, 0, cards.length - 1);
+    complete(true, currentIndex, -1);
   };
 
   return (
@@ -84,7 +79,7 @@ const TestSwiper2 = () => {
         <animated.div
           key={food.name}
           style={springs[index]}
-          {...bind(index)} // Pass index as args here
+          {...bind(index)}
           className='absolute z-20 h-5/6 w-[50rem] cursor-grab touch-none overflow-hidden rounded-16 bg-white'
         >
           <Image
