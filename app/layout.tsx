@@ -13,7 +13,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: '숟가락',
   description:
-    '오늘 뭐먹지 ? 내 음식 취향은 ? 냉장고에 있는 걸로 뭘 할 수 있을까... 정답은 바로 "숟가락" !!!'
+    '오늘 뭐먹지 ? 내 음식 취향은 ? 냉장고에 있는 걸로 뭘 할 수 있을까... 정답은 바로 "숟가락" !!!',
+  icons: {
+    icon: '/images/soodgarak.png'
+  }
 };
 
 export default function RootLayout({
