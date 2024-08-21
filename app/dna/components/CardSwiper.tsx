@@ -1,19 +1,21 @@
 'use client';
 
-import { DUMMY_FOODS } from '@/mock/data';
-import { useSprings, animated } from '@react-spring/web';
+import { useSprings } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
-import Image from 'next/image';
 import HateButton from './HateButton';
 import LikeButton from './LikeButton';
 import { useRef, useState } from 'react';
 import { Food } from '@/types/food';
 import FoodSwipeCard from './FoodSwipeCard';
+import { useQuery } from '@tanstack/react-query';
 
 const CardSwiper = () => {
-  const [cards, setCards] = useState<Food[]>(DUMMY_FOODS);
-  const [currentIndex, setCurrentIndex] = useState(cards.length - 1);
-  const [springs, api] = useSprings(cards.length, (index) => ({
+  const { data: cards } = useQuery<Food[]>({
+    queryKey: ['dna'],
+    queryFn: () => fetch('/api/dna').then((res) => res.json())
+  });
+  const [currentIndex, setCurrentIndex] = useState(cards!.length - 1);
+  const [springs, api] = useSprings(cards!.length, (index) => ({
     x: 0,
     y: 0,
     rotate: 0,
@@ -76,8 +78,8 @@ const CardSwiper = () => {
 
   return (
     <section className='relative mx-auto flex w-[50rem] grow flex-col items-center' ref={frame}>
-      {cards.map((food, index) => (
-        <FoodSwipeCard key={food.name} food={food} style={springs[index]} bind={bind(index)} />
+      {cards?.map((food, index) => (
+        <FoodSwipeCard key={food.id} food={food} style={springs[index]} bind={bind(index)} />
       ))}
       <div className='absolute bottom-0 flex justify-center gap-36'>
         <HateButton onClick={hate} />
