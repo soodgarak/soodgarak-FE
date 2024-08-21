@@ -79,7 +79,7 @@ const CardSwiper = () => {
   return (
     <section className='relative mx-auto flex w-[50rem] grow flex-col items-center' ref={frame}>
       {cards?.map((food, index) => (
-        <FoodSwipeCard key={food.name} food={food} style={springs[index]} bind={bind(index)} />
+        <FoodSwipeCard key={food.id} food={food} style={springs[index]} bind={bind(index)} />
       ))}
       <div className='absolute bottom-0 flex justify-center gap-36'>
         <HateButton onClick={hate} />
