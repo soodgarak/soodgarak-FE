@@ -9,6 +9,9 @@ import { Food } from '@/types/food';
 import FoodSwipeCard from './FoodSwipeCard';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import Modal from '@/components/Modal';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const CardSwiper = () => {
   const { data: cards } = useQuery<Food[]>({
@@ -20,6 +23,7 @@ const CardSwiper = () => {
 
   const [currentIndex, setCurrentIndex] = useState(cards!.length - 1);
   const [likedCards, setLikedCards] = useState<Food[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [springs, api] = useSprings(cards!.length, (index) => ({
     x: 0,
     y: 0,
@@ -32,7 +36,7 @@ const CardSwiper = () => {
 
   useEffect(() => {
     if (likedCards.length === 15) {
-      router.push('/dna/result');
+      setIsOpen(true);
     }
   }, [likedCards.length, router]);
 
@@ -51,6 +55,7 @@ const CardSwiper = () => {
 
       const isGone = gone.has(index);
       const x = isGone ? (200 + window.innerWidth) * xDir : active ? mx : 0;
+      console.log(x);
       const rotate = active
         ? (mx / window.innerWidth) * 20
         : isGone
@@ -62,7 +67,6 @@ const CardSwiper = () => {
       if (isGone) {
         setCurrentIndex(index - 1);
         if (xDir === 1) setLikedCards((prev) => [...prev, cards![currentIndex]]);
-        console.log(likedCards.length);
       }
 
       return {
@@ -93,15 +97,28 @@ const CardSwiper = () => {
   };
 
   return (
-    <section className='relative mx-auto flex w-[50rem] grow flex-col items-center' ref={frame}>
-      {cards?.map((food, index) => (
-        <FoodSwipeCard key={food.id} food={food} style={springs[index]} bind={bind(index)} />
-      ))}
-      <div className='absolute bottom-0 flex justify-center gap-36'>
-        <HateButton onClick={hate} />
-        <LikeButton onClick={like} />
-      </div>
-    </section>
+    <>
+      <section className='relative mx-auto flex w-[50rem] grow flex-col items-center' ref={frame}>
+        {cards?.map((food, index) => (
+          <FoodSwipeCard key={food.id} food={food} style={springs[index]} bind={bind(index)} />
+        ))}
+        <div className='absolute bottom-0 flex justify-center gap-36'>
+          <HateButton onClick={hate} />
+          <LikeButton onClick={like} />
+        </div>
+      </section>
+      <Modal isOpen={isOpen} onClose={() => {}}>
+        <div>
+          <p className='mb-12 text-center text-32 font-bold'>분석이 완료되었습니다.</p>
+          <p className='mb-20 text-center text-28 font-bold'>결과를 확인하시겠습니까 ?</p>
+          <Button className='w-full' asChild>
+            <Link href='/dna/result' className='text-28 font-bold'>
+              결과 보기
+            </Link>
+          </Button>
+        </div>
+      </Modal>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
-const buttonVariants = cva('py-8 px-16 rounded-12', {
+const buttonVariants = cva('py-8 px-16 rounded-12 flex justify-center items-center', {
   variants: {
     variant: {
       default: 'bg-primary hover:bg-primary/90 text-white',

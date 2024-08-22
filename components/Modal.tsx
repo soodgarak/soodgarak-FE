@@ -32,7 +32,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.2 }}
-              className='relative rounded-md bg-white p-8'
+              className='relative rounded-md bg-white p-16'
             >
               {children}
             </motion.div>
