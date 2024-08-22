@@ -55,7 +55,6 @@ const CardSwiper = () => {
 
       const isGone = gone.has(index);
       const x = isGone ? (200 + window.innerWidth) * xDir : active ? mx : 0;
-      console.log(x);
       const rotate = active
         ? (mx / window.innerWidth) * 20
         : isGone
