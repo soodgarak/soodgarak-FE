@@ -4,17 +4,22 @@ import { useSprings } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import HateButton from './HateButton';
 import LikeButton from './LikeButton';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Food } from '@/types/food';
 import FoodSwipeCard from './FoodSwipeCard';
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 const CardSwiper = () => {
   const { data: cards } = useQuery<Food[]>({
     queryKey: ['dna'],
     queryFn: () => fetch('/api/dna').then((res) => res.json())
   });
+
+  const router = useRouter();
+
   const [currentIndex, setCurrentIndex] = useState(cards!.length - 1);
+  const [likedCards, setLikedCards] = useState<Food[]>([]);
   const [springs, api] = useSprings(cards!.length, (index) => ({
     x: 0,
     y: 0,
@@ -24,6 +29,12 @@ const CardSwiper = () => {
   }));
   const frame = useRef<HTMLDivElement>(null);
   const gone = new Set<number>();
+
+  useEffect(() => {
+    if (likedCards.length === 15) {
+      router.push('/dna/result');
+    }
+  }, [likedCards.length, router]);
 
   const complete = (
     isTrigger: boolean,
@@ -37,7 +48,6 @@ const CardSwiper = () => {
 
     api.start((i) => {
       if (index !== i) return;
-      setCurrentIndex(index - 1);
 
       const isGone = gone.has(index);
       const x = isGone ? (200 + window.innerWidth) * xDir : active ? mx : 0;
@@ -48,6 +58,12 @@ const CardSwiper = () => {
           : 0;
 
       const scale = active ? 1.1 : 1;
+
+      if (isGone) {
+        setCurrentIndex(index - 1);
+        if (xDir === 1) setLikedCards((prev) => [...prev, cards![currentIndex]]);
+        console.log(likedCards.length);
+      }
 
       return {
         x,

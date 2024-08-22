@@ -7,9 +7,13 @@ const DNAResultPage = () => {
       <p className='text-28 font-bold'>VADH</p>
       <div className='h-[9.6rem] w-[9.6rem] rounded-[1.2rem] bg-primary' />
       <p className='text-24 font-bold'>칠색조</p>
-      <div className='mt-40 flex gap-20'>
-        <Button>다시하기</Button>
-        <Button>내 정보에 등록</Button>
+      <div className='mt-40 flex w-full gap-20'>
+        <Button className='w-full' variant='outline'>
+          <p className='text-28 font-bold'>다시하기</p>
+        </Button>
+        <Button className='w-full'>
+          <p className='text-28 font-bold'>내 정보에 등록</p>
+        </Button>
       </div>
     </section>
   );
