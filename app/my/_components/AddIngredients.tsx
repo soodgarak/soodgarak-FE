@@ -48,6 +48,18 @@ const AddIngredients = () => {
     }
   }, [expirationDate, purchaseDate]);
 
+  const handleSubmit = () => {
+    const data = {
+      category: selectedCategory?.label,
+      subCategory: selectedSubCategory?.label,
+      itemName,
+      storage,
+      purchaseDate,
+      expirationDate
+    };
+    console.log(data);
+  };
+
   return (
     <div>
       <h3 className='mb-32 text-28 font-bold'>냉장고 식재료 추가하기</h3>
@@ -151,6 +163,12 @@ const AddIngredients = () => {
           />
         </div>
       </div>
+      <button
+        className='rounded-4 mt-[12rem] h-[5.2rem] w-full bg-primary text-20 text-white'
+        onClick={handleSubmit}
+      >
+        추가하기
+      </button>
     </div>
   );
 };
