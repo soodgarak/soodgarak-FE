@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Select from 'react-select';
 import Image from 'next/image';
 import { CategoryOption, categoryOptions, subCategoryOptions } from '@/utils/categoryData';
@@ -14,13 +14,20 @@ const AddIngredients = () => {
   const [purchaseDate, setPurchaseDate] = useState(getTodayDate());
   const [expirationDate, setExpirationDate] = useState('');
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // 대분류 내용 변경
   const handleCategoryChange = (option: CategoryOption | null) => {
     setSelectedCategory(option);
-    setSelectedSubCategory(null); // 대분류 내용이 변경되면 소분류 초기화
+    setSelectedSubCategory(null); // 소분류 초기화
+    setItemName(''); // 이름 필드도 초기화
   };
 
   const handleSubCategoryChange = (option: CategoryOption | null) => {
     setSelectedSubCategory(option);
+    if (option) {
+      setItemName(option.label);
+    }
   };
 
   // 옵션 커스텀
@@ -39,6 +46,13 @@ const AddIngredients = () => {
 
   const handleStorageChange = (value: string) => {
     setStorage(value);
+  };
+
+  // 이름 입력 필드 포커스
+  const handleNameFocus = () => {
+    if (inputRef.current && selectedSubCategory && itemName === selectedSubCategory.label) {
+      inputRef.current.select();
+    }
   };
 
   useEffect(() => {
@@ -115,7 +129,9 @@ const AddIngredients = () => {
           type='text'
           value={itemName}
           onChange={(e) => setItemName(e.target.value)}
-          className='rounded-4 border-gray-md h-[4.8rem] w-[28.1rem] border px-12 text-18 focus:outline-[#2684ff]'
+          onFocus={handleNameFocus}
+          ref={inputRef}
+          className='h-[4.8rem] w-[28.1rem] rounded-4 border border-gray-md px-12 text-18 focus:outline-[#2684ff]'
         />
       </div>
       <div className='mb-32'>
@@ -123,7 +139,7 @@ const AddIngredients = () => {
         <div className='flex space-x-4'>
           <button
             onClick={() => handleStorageChange('냉장')}
-            className={`border-gray-md h-[3.6rem] w-[7.2rem] rounded-20 border text-18 transition-colors ${
+            className={`h-[3.6rem] w-[7.2rem] rounded-20 border border-gray-md text-18 transition-colors ${
               storage === '냉장' ? 'bg-gray-400 text-white' : 'text-gray-800'
             }`}
           >
@@ -147,7 +163,7 @@ const AddIngredients = () => {
             value={purchaseDate}
             max={getTodayDate()}
             onChange={(e) => setPurchaseDate(e.target.value)}
-            className='rounded-4 relative h-[4.8rem] w-[22rem] cursor-pointer border px-12 text-18 focus:outline-[#2684ff]'
+            className='relative h-[4.8rem] w-[22rem] cursor-pointer rounded-4 border px-12 text-18 focus:outline-[#2684ff]'
             onFocus={(e) => e.target.blur()}
           />
         </div>
@@ -159,12 +175,12 @@ const AddIngredients = () => {
             value={expirationDate}
             min={purchaseDate}
             onChange={(e) => setExpirationDate(e.target.value)}
-            className='rounded-4 relative h-[4.8rem] w-[22rem] border px-12 text-18 focus:outline-[#2684ff]'
+            className='relative h-[4.8rem] w-[22rem] rounded-4 border px-12 text-18 focus:outline-[#2684ff]'
           />
         </div>
       </div>
       <button
-        className='rounded-4 mt-[12rem] h-[5.2rem] w-full bg-primary text-20 text-white'
+        className='mt-[12rem] h-[5.2rem] w-full rounded-4 bg-primary text-20 text-white'
         onClick={handleSubmit}
       >
         추가하기
