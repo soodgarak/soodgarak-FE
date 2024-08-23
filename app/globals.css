@@ -27,3 +27,12 @@ img {
   -moz-user-drag: none;
   -o-user-drag: none;
 }
+
+/* 달력 입력 막기 */
+input[type='date']::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-position: calc(100% - 1.2rem);
+  cursor: pointer;
+}

@@ -4,12 +4,15 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import Image from 'next/image';
 import { CategoryOption, categoryOptions, subCategoryOptions } from '@/utils/categoryData';
+import { getTodayDate } from '@/utils/getTodayDate';
 
 const AddIngredients = () => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryOption | null>(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState<CategoryOption | null>(null);
   const [itemName, setItemName] = useState('');
   const [storage, setStorage] = useState<string | null>('냉장');
+  const [purchaseDate, setPurchaseDate] = useState(getTodayDate());
+  const [expirationDate, setExpirationDate] = useState('');
 
   const handleCategoryChange = (option: CategoryOption | null) => {
     setSelectedCategory(option);
@@ -37,6 +40,13 @@ const AddIngredients = () => {
   const handleStorageChange = (value: string) => {
     setStorage(value);
   };
+
+  useEffect(() => {
+    // 유통기한이 구매날짜보다 이른 경우 유통기한을 구매날짜로 변경
+    if (expirationDate && new Date(expirationDate) < new Date(purchaseDate)) {
+      setExpirationDate(purchaseDate);
+    }
+  }, [expirationDate, purchaseDate]);
 
   return (
     <div>
@@ -115,6 +125,30 @@ const AddIngredients = () => {
           >
             냉동
           </button>
+        </div>
+      </div>
+      <div className='flex items-center'>
+        <div>
+          <label className='mb-12 block text-20'>구매날짜</label>
+          <input
+            type='date'
+            value={purchaseDate}
+            max={getTodayDate()}
+            onChange={(e) => setPurchaseDate(e.target.value)}
+            className='rounded-4 relative h-[4.8rem] w-[22rem] cursor-pointer border px-12 text-18 focus:outline-[#2684ff]'
+            onFocus={(e) => e.target.blur()}
+          />
+        </div>
+        <p className='mx-20 mt-32 text-32'>~</p>
+        <div>
+          <label className='mb-12 block text-20'>유통기한</label>
+          <input
+            type='date'
+            value={expirationDate}
+            min={purchaseDate}
+            onChange={(e) => setExpirationDate(e.target.value)}
+            className='rounded-4 relative h-[4.8rem] w-[22rem] border px-12 text-18 focus:outline-[#2684ff]'
+          />
         </div>
       </div>
     </div>
