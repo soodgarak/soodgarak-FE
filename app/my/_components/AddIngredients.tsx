@@ -8,6 +8,8 @@ import { CategoryOption, categoryOptions, subCategoryOptions } from '@/utils/cat
 const AddIngredients = () => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryOption | null>(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState<CategoryOption | null>(null);
+  const [itemName, setItemName] = useState('');
+  const [storage, setStorage] = useState<string | null>('냉장');
 
   const handleCategoryChange = (option: CategoryOption | null) => {
     setSelectedCategory(option);
@@ -31,6 +33,10 @@ const AddIngredients = () => {
   // 현재 선택된 대분류에 소분류 옵션이 있는지 확인
   const hasSubCategories =
     selectedCategory && subCategoryOptions[selectedCategory.value]?.length > 0;
+
+  const handleStorageChange = (value: string) => {
+    setStorage(value);
+  };
 
   return (
     <div>
@@ -79,6 +85,36 @@ const AddIngredients = () => {
               </div>
             </>
           )}
+        </div>
+      </div>
+      <div className='mb-32'>
+        <label className='mb-12 block text-20'>이름</label>
+        <input
+          type='text'
+          value={itemName}
+          onChange={(e) => setItemName(e.target.value)}
+          className='rounded-4 border-gray-md h-[4.8rem] w-[28.1rem] border px-12 text-18 focus:outline-[#2684ff]'
+        />
+      </div>
+      <div className='mb-32'>
+        <label className='mb-12 block text-20'>보관 상태</label>
+        <div className='flex space-x-4'>
+          <button
+            onClick={() => handleStorageChange('냉장')}
+            className={`border-gray-md h-[3.6rem] w-[7.2rem] rounded-20 border text-18 transition-colors ${
+              storage === '냉장' ? 'bg-gray-400 text-white' : 'text-gray-800'
+            }`}
+          >
+            냉장
+          </button>
+          <button
+            onClick={() => handleStorageChange('냉동')}
+            className={`h-[3.6rem] w-[7.2rem] rounded-20 border text-18 transition-colors ${
+              storage === '냉동' ? 'bg-gray-400 text-white' : 'text-gray-800'
+            }`}
+          >
+            냉동
+          </button>
         </div>
       </div>
     </div>
