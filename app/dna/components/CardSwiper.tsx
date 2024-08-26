@@ -37,8 +37,10 @@ const CardSwiper = () => {
   useEffect(() => {
     if (likedCards.length === 15) {
       setIsOpen(true);
+    } else {
+      if (currentIndex + 1 === 10) alert('카드 10장 더 주세요 !');
     }
-  }, [likedCards.length, router]);
+  }, [likedCards.length, router, currentIndex]);
 
   const complete = (
     isTrigger: boolean,
