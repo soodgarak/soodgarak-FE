@@ -77,7 +77,6 @@ const useTinder = () => {
   const bind = useDrag(
     ({ active, movement: [mx], direction: [xDir], velocity: [vx], args: [index] }) => {
       const trigger = vx > 0.2;
-      if (!active && trigger) gone.add(index);
 
       complete(!active && trigger, index, xDir, active, mx, vx);
     }
