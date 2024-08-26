@@ -15,6 +15,8 @@ const AddIngredients = () => {
   const [expirationDate, setExpirationDate] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const purchaseDateRef = useRef<HTMLInputElement>(null);
+  const expirationDateRef = useRef<HTMLInputElement>(null);
 
   // 대분류 내용 변경
   const handleCategoryChange = (option: CategoryOption | null) => {
@@ -55,6 +57,19 @@ const AddIngredients = () => {
     }
   };
 
+  // date input focus
+  const handlePurchaseDateClick = () => {
+    if (purchaseDateRef.current) {
+      purchaseDateRef.current.focus();
+    }
+  };
+
+  const handleExpirationDateClick = () => {
+    if (expirationDateRef.current) {
+      expirationDateRef.current.focus();
+    }
+  };
+
   useEffect(() => {
     // 유통기한이 구매날짜보다 이른 경우 유통기한을 구매날짜로 변경
     if (expirationDate && new Date(expirationDate) < new Date(purchaseDate)) {
@@ -82,6 +97,7 @@ const AddIngredients = () => {
         <div className='flex items-center justify-between'>
           <div className='w-[28.1rem]'>
             <Select
+              instanceId='category'
               value={selectedCategory}
               onChange={handleCategoryChange}
               options={categoryOptions}
@@ -104,6 +120,7 @@ const AddIngredients = () => {
               </div>
               <div className='w-[28.1rem]'>
                 <Select
+                  instanceId='subCategory'
                   value={selectedSubCategory}
                   onChange={handleSubCategoryChange}
                   options={subCategoryOptions[selectedCategory.value]}
@@ -160,11 +177,12 @@ const AddIngredients = () => {
           <label className='mb-12 block text-20'>구매날짜</label>
           <input
             type='date'
+            ref={purchaseDateRef}
             value={purchaseDate}
             max={getTodayDate()}
             onChange={(e) => setPurchaseDate(e.target.value)}
-            className='relative h-[4.8rem] w-[22rem] cursor-pointer rounded-4 border px-12 text-18 focus:outline-[#2684ff]'
-            onFocus={(e) => e.target.blur()}
+            onClick={handlePurchaseDateClick}
+            className='relative h-[4.8rem] w-[22rem] cursor-pointer select-none rounded-4 border px-12 text-18 focus:outline-[#2684ff]'
           />
         </div>
         <p className='mx-20 mt-32 text-32'>~</p>
@@ -172,10 +190,12 @@ const AddIngredients = () => {
           <label className='mb-12 block text-20'>유통기한</label>
           <input
             type='date'
+            ref={expirationDateRef}
             value={expirationDate}
             min={purchaseDate}
             onChange={(e) => setExpirationDate(e.target.value)}
-            className='relative h-[4.8rem] w-[22rem] rounded-4 border px-12 text-18 focus:outline-[#2684ff]'
+            onClick={handleExpirationDateClick}
+            className='relative h-[4.8rem] w-[22rem] select-none rounded-4 border px-12 text-18 focus:outline-[#2684ff]'
           />
         </div>
       </div>
