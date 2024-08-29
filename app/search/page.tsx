@@ -1,5 +1,3 @@
-import FoodList from '@/components/FoodList';
-import { DUMMY_FOODS } from '@/mock/data';
 import { redirect } from 'next/navigation';
 import SearchResult from './components/SearchResult';
 
