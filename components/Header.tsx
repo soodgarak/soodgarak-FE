@@ -4,11 +4,14 @@ import Image from 'next/image';
 import SearchIcon from '@/components/icon/SearchIcon';
 import { FormEvent, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getQueryClient } from '@/context/queryProvider';
 
 const Header = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get('keyword');
 
   const inputFocusHandler = () => {
     inputRef.current?.focus();
@@ -16,7 +19,20 @@ const Header = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    router.push(`/search?keyword=${inputRef.current?.value}`);
+
+    // 검색할 때마다 새 요청 보내기
+    if (inputRef.current?.value === keyword) {
+      location.href = `/search?keyword=${inputRef.current?.value}`;
+    } else {
+      const queryClient = getQueryClient();
+      queryClient.removeQueries({
+        queryKey: ['foods', { type: 'search' }, inputRef.current?.value],
+        exact: true
+      });
+
+      router.push(`/search?keyword=${inputRef.current?.value}`);
+    }
+
     if (inputRef.current) inputRef.current.value = '';
   };
 
