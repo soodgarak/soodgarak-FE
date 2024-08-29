@@ -20,7 +20,7 @@ const Header = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    // 검색할 때마다 새 요청 보내기
+    // 매 검색 시 새로운 데이터 요청
     if (inputRef.current?.value === keyword) {
       location.href = `/search?keyword=${inputRef.current?.value}`;
     } else {
