@@ -1,4 +1,4 @@
-import { FoodsResponse, SimpleFood } from '@/types/food';
+import { FoodsResponse } from '@/types/food';
 
 export const getTodayRecommendationFoods = async (pageParams: number): Promise<FoodsResponse> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?page=${pageParams}`);

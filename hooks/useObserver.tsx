@@ -1,20 +1,38 @@
-import { MutableRefObject, useEffect } from 'react';
+import { FoodsResponse } from '@/types/food';
+import {
+  FetchNextPageOptions,
+  InfiniteData,
+  InfiniteQueryObserverResult
+} from '@tanstack/react-query';
+import { useCallback, useEffect, useRef } from 'react';
 
 type ObserverProps = {
-  target: MutableRefObject<null>;
-  onIntersect: (entries: IntersectionObserverEntry[]) => void;
   root?: null;
   rootMargin?: string;
   threshold?: number;
+  fetchNextPage: (
+    options?: FetchNextPageOptions | undefined
+  ) => Promise<InfiniteQueryObserverResult<InfiniteData<FoodsResponse, unknown>, Error>>;
 };
 
 export default function useObserver({
-  target,
-  onIntersect,
   root = null,
   rootMargin = '0px',
-  threshold = 1.0
+  threshold = 1.0,
+  fetchNextPage
 }: ObserverProps) {
+  const target = useRef(null);
+
+  const onIntersect = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry.isIntersecting) {
+        fetchNextPage();
+      }
+    },
+    [fetchNextPage]
+  );
+
   useEffect(() => {
     let observer: IntersectionObserver;
 
@@ -29,4 +47,6 @@ export default function useObserver({
 
     return () => observer && observer.disconnect();
   }, [target, rootMargin, threshold, onIntersect, root]);
+
+  return { target };
 }

@@ -4,7 +4,6 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import FoodList from './FoodList';
 import { getFoodsByCategory } from '@/service/food';
 import Spinner from './Spinner';
-import { useRef } from 'react';
 import useObserver from '@/hooks/useObserver';
 
 const FoodListFetch = ({ mbti }: { mbti: string }) => {
@@ -19,18 +18,7 @@ const FoodListFetch = ({ mbti }: { mbti: string }) => {
     }
   });
 
-  const bottom = useRef(null);
-
-  const onIntersect: (entries: IntersectionObserverEntry[]) => void = ([entry]) => {
-    if (entry.isIntersecting) {
-      fetchNextPage();
-    }
-  };
-
-  useObserver({
-    target: bottom,
-    onIntersect
-  });
+  const { target: bottom } = useObserver({ fetchNextPage });
 
   return (
     <>

@@ -5,7 +5,6 @@ import Spinner from '@/components/Spinner';
 import useObserver from '@/hooks/useObserver';
 import { getTodayRecommendationFoods } from '@/service/food';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useRef } from 'react';
 
 const TodayRecommandation = () => {
   const { data, isPending, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
@@ -19,18 +18,7 @@ const TodayRecommandation = () => {
     }
   });
 
-  const bottom = useRef(null);
-
-  const onIntersect: (entries: IntersectionObserverEntry[]) => void = ([entry]) => {
-    if (entry.isIntersecting) {
-      fetchNextPage();
-    }
-  };
-
-  useObserver({
-    target: bottom,
-    onIntersect
-  });
+  const { target: bottom } = useObserver({ fetchNextPage });
 
   return (
     <>
