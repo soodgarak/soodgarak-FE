@@ -15,7 +15,7 @@ const FoodDnaLanding = () => {
     const queryClient = getQueryClient();
     await queryClient.prefetchQuery({
       queryKey: ['foods', { type: 'dna' }],
-      queryFn: getFoodCards,
+      queryFn: () => getFoodCards(1),
       staleTime: 0
     });
     setIsAgree(true);

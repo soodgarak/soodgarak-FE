@@ -31,8 +31,8 @@ export const getFoodsByKeyword = async (
   return foods;
 };
 
-export const getFoodCards = async (): Promise<FoodsResponse> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe`);
+export const getFoodCards = async (pageParams: number): Promise<FoodsResponse> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?page=${pageParams}`);
   const foods = await res.json();
 
   return foods;

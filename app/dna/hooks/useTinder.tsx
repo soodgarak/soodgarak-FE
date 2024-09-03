@@ -2,27 +2,33 @@ import { getFoodCards } from '@/service/food';
 import { SimpleFood } from '@/types/food';
 import { mbtiDerivation } from '@/utils/foodDNA';
 import { useSprings } from '@react-spring/web';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useDrag } from '@use-gesture/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const useTinder = () => {
-  // 무한 쿼리로 변경 예정
-  const { data } = useQuery({
+  const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['foods', { type: 'dna' }],
-    queryFn: getFoodCards
+    queryFn: ({ pageParam }) => getFoodCards(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (result, _, next) => {
+      if (!result.hasNextData) return undefined;
+
+      return next + 1;
+    }
   });
 
   const router = useRouter();
 
-  const cards = data?.recipeResponse;
+  const cards = data?.pages.map((v) => v.recipeResponse).flat() || [];
+  console.log(cards);
 
-  const [currentIndex, setCurrentIndex] = useState(cards!.length - 1);
+  const [currentIndex, setCurrentIndex] = useState(cards.length - 1);
   const [likedCards, setLikedCards] = useState<SimpleFood[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [springs, api] = useSprings(cards!.length, (index) => ({
+  const [springs, api] = useSprings(cards.length, (index) => ({
     x: 0,
     y: 0,
     rotate: 0,
