@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect } from "react";
+import { MutableRefObject, useEffect } from 'react';
 
 type ObserverProps = {
   target: MutableRefObject<null>;
@@ -12,8 +12,8 @@ export default function useObserver({
   target,
   onIntersect,
   root = null,
-  rootMargin = "0px",
-  threshold = 1.0,
+  rootMargin = '0px',
+  threshold = 1.0
 }: ObserverProps) {
   useEffect(() => {
     let observer: IntersectionObserver;
@@ -22,7 +22,7 @@ export default function useObserver({
       observer = new IntersectionObserver(onIntersect, {
         root,
         rootMargin,
-        threshold,
+        threshold
       });
       observer.observe(target.current);
     }

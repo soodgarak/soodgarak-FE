@@ -38,8 +38,8 @@ const TodayRecommandation = () => {
         <h2 className='mb-24 text-28 font-bold'>오늘 이런 음식은 어때요 ?</h2>
         {isPending && <Spinner color='border-primary' />}
         {data?.pages.map((page, index) => <FoodList key={index} foods={page.recipeResponse} />)}
-        {isFetchingNextPage && <Spinner color='border-primary' />}
       </section>
+      {isFetchingNextPage && <Spinner color='border-primary' />}
       <div ref={bottom} />
     </>
   );
