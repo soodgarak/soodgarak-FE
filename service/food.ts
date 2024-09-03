@@ -19,8 +19,13 @@ export const getFoodsByCategory = async (
   return foods;
 };
 
-export const getFoodsByKeyword = async (keyword: string): Promise<FoodsResponse> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?keyword=${keyword}`);
+export const getFoodsByKeyword = async (
+  keyword: string,
+  pageParams: number
+): Promise<FoodsResponse> => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?keyword=${keyword}&page=${pageParams}`
+  );
   const foods = await res.json();
 
   return foods;
